@@ -6,7 +6,7 @@ function App()
 {
   const [task, setTask] = useState("")
   const [tasks,setTasks] = useState([])
-  const [edidtMode, setEdittMode] = useState(false)
+  const [edidtMode, setEditMode] = useState(false)
   const [id, setId] = useState("")
   const [error, setError] = useState(null)
 
@@ -46,7 +46,7 @@ function App()
                         }
                           const editedTask=tasks.map(item=>item.id===id?{id, name:task}:item)
                           setTasks(editedTask)
-                          setEdittMode(false)
+                          setEditMode(false)
                           setTask("")
                           setId("")
                           }
@@ -56,7 +56,7 @@ function App()
                             }
   const editTask= (theTask) => {
                             setTask(theTask.name)
-                            setEdittMode(true)
+                            setEditMode(true)
                             setId(theTask.id)
                                 }
   return (
