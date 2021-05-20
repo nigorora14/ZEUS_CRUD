@@ -1,6 +1,6 @@
 import { isEmpty,size } from 'lodash'
-import React,{useState} from 'react'
-import shortid, { isValid } from 'shortid'
+import React,{useState,useEffect} from 'react'
+import { addDocument, getCollection } from './actions'
 
 function App() 
 {
@@ -9,6 +9,15 @@ function App()
   const [edidtMode, setEditMode] = useState(false)
   const [id, setId] = useState("")
   const [error, setError] = useState(null)
+
+  useEffect(() => {
+                    (async()=>{
+                                const result = await getCollection("tasks")
+                                if (result.statusResponse) {
+                                  setTasks(result.data) //muestra el resultado
+                                }
+                              })() //metodo asyincrono auto ejecutable
+                   }, [])//[] significa que solo se ejecuta cuando carga la pagina
 
   const validForm=()=>{
                         let isValid=true
@@ -22,19 +31,21 @@ function App()
                           return isValid
                       }
   
-  const addTask=(e) => {
+  const addTask= async(e) => {
                         e.preventDefault()
 
                         if(!validForm())
                         {
                           return
                         }
-
-                        const newTask = {
-                                          id:shortid.generate(),
-                                          name:task
-                                        }
-                        setTasks([...tasks,newTask])
+                        const result = await addDocument("tasks",{name:task})
+                        
+                        if (!result.statusResponse) {
+                          setError(result.error)
+                          return
+                        }
+                        
+                        setTasks([...tasks,{id:result.data.id, name:task}])
                         setTask("")
                         }
   const saveTask=(e) => {
