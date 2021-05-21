@@ -1,6 +1,6 @@
 import { isEmpty,size } from 'lodash'
 import React,{useState,useEffect} from 'react'
-import { addDocument, getCollection } from './actions'
+import { addDocument,deleteDocument, getCollection, updateDocument } from './actions'
 
 function App() 
 {
@@ -10,7 +10,7 @@ function App()
   const [id, setId] = useState("")
   const [error, setError] = useState(null)
 
-  useEffect(() => {
+   useEffect(() => {
                     (async()=>{
                                 const result = await getCollection("tasks")
                                 if (result.statusResponse) {
@@ -48,20 +48,32 @@ function App()
                         setTasks([...tasks,{id:result.data.id, name:task}])
                         setTask("")
                         }
-  const saveTask=(e) => {
+  const saveTask= async (e) => {
                           e.preventDefault()
 
                           if(!validForm())
                         {
                           return
                         }
+                        //constante result = llamando al metodo de actualizacion de la coleccion de tasks con el id y data name:task la variable
+                          const result  = await updateDocument("tasks",id,{name:task})
+                           if (!result.statusResponse) {
+                            setError(result.error)
+                            return
+                          }
                           const editedTask=tasks.map(item=>item.id===id?{id, name:task}:item)
                           setTasks(editedTask)
                           setEditMode(false)
                           setTask("")
                           setId("")
                           }
-  const deleteTask= (id) => {
+  const deleteTask = async (id) => {
+                            const result = await deleteDocument("tasks",id)
+                            if (!result.statusResponse) {
+                              setError(result.error)
+                              return
+                            }
+
                             const filteredTasks=tasks.filter(task=>task.id !== id)
                             setTasks(filteredTasks)
                             }
