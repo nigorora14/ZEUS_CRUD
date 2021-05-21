@@ -73,14 +73,16 @@ function App()
                               setError(result.error)
                               return
                             }
-
+                            setEditMode(false)
                             const filteredTasks=tasks.filter(task=>task.id !== id)
                             setTasks(filteredTasks)
                             }
   const editTask= (theTask) => {
-                            setTask(theTask.name)
-                            setEditMode(true)
-                            setId(theTask.id)
+    
+                              setTask(theTask.name)
+                              setEditMode(true)
+                              setId(theTask.id)
+                            
                                 }
   return (
     <div className="container mt-5">
@@ -116,7 +118,10 @@ function App()
                  onChange={(text)=>setTask(text.target.value)}  //establecerlo
                  value={task}    //leerlo - lo limpia despues de dar click
                  ></input>
-          <button className={edidtMode?"btn btn-warning btn-block":"btn btn-dark btn-block"} type="submit" >{edidtMode? "Guardar":"Agregar"}</button>
+          <button className={edidtMode?"btn btn-warning btn-block":"btn btn-dark btn-block"} 
+                  type="submit" >
+                    {edidtMode? "Actualizar":"Agregar"}
+          </button>
                  {
                    error && <span className="text-danger">{error}</span>
                  }
