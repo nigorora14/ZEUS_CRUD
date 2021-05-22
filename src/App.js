@@ -73,9 +73,9 @@ function App()
                               setError(result.error)
                               return
                             }
-                            setEditMode(false)
                             const filteredTasks=tasks.filter(task=>task.id !== id)
                             setTasks(filteredTasks)
+                            setEditMode(false)
                             }
   const editTask= (theTask) => {
     
